@@ -1,0 +1,16 @@
+[project]
+name = "tower-of-the-sorcerer-solver"
+version = "0.1.0"
+description = "Simulator and agent-comparison harness for Tower of the Sorcerer"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[tool.setuptools]
+packages = ["game", "agents", "evaluation"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
