@@ -38,7 +38,7 @@ class GameState:
         return [
             MoveTo(n)
             for n in sorted(self.tower_state.get_active_nodes())
-            if self.tower.nodes[n][0].completeable(self.player)
+            if self.tower.nodes[n][0].completable(self.player)
         ]
 
     def legal_special_actions(self) -> list[UseSpecial]:

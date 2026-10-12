@@ -3,6 +3,7 @@ import argparse
 
 from agents import BeamSearchAgent, GreedyAgent, RandomAgent, SpecialRandomAgent, RandomGreedyAgent
 from evaluation import compare_agents
+from game.floors import build_tower
 
 
 def main():
@@ -28,7 +29,7 @@ def main():
     best = max(comparison.reports.values(), key=lambda r: r.best_score).best_run
     print(f"Highest-scoring run: {best.agent_name} (seed {best.seed}), "
           f"won={best.won}, {best.steps} steps")
-    print(best.path)
+    build_tower().print_path_with_annotations(best.path)
 
 
 if __name__ == "__main__":

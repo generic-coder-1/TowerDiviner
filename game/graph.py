@@ -3,6 +3,8 @@ from __future__ import annotations
 from collections import deque
 from dataclasses import field
 
+from game.actions import SPECIAL_ACTIONS, Action, MoveTo, SpecialAction, UseSpecial
+
 from .entity import Player
 from .helpers import compact_dataclass
 from .keys import Keys
@@ -25,7 +27,7 @@ class TowerNode:
     key_required: Keys | None = None
     special_actions_granted: list[str] = field(default_factory=list)
 
-    def completeable(self, player: Player) -> bool:
+    def completable(self, player: Player) -> bool:
         if self.monster and player.can_beat(self.monster.stats) is None:
             return False
         if self.key_required and not (player.keys >= self.key_required):
@@ -33,7 +35,7 @@ class TowerNode:
         return True
 
     def try_complete(self, player: Player) -> bool:
-        if not self.completeable(player):
+        if not self.completable(player):
             return False
 
         if self.monster:
@@ -54,11 +56,15 @@ class TowerGraph:
     """The tower as an undirected graph. Node 0 is the start, the last node is the goal."""
 
     nodes: list[tuple[TowerNode, list[int]]] = field(default_factory=list)
+    node_annotation: list[tuple[str, str]] = field(default_factory=list)
+    current_floor: str = ""
+    current_location: str = ""
     _goal_distances: list[int] | None = field(default=None, init=False, repr=False, compare=False)
 
     def add_node(self, node: TowerNode, connected: list[int]) -> int:
         node_index = len(self.nodes)
         self.nodes.append((node, list(connected)))
+        self.node_annotation.append((self.current_floor, self.current_location))
         for neighbor in connected:
             self.nodes[neighbor][1].append(node_index)
         self._goal_distances = None
@@ -86,6 +92,26 @@ class TowerGraph:
                         queue.append(neighbor)
             self._goal_distances = dist
         return self._goal_distances
+
+    def print_path_with_annotations(self, path: list[Action]):
+        floor = None
+        location = None
+        
+        for action in path:
+            if isinstance(action, MoveTo):
+                node_floor, node_location = self.node_annotation[action.node]
+                if node_floor != floor:
+                    print(f"Floor: {node_floor}")
+                    floor = node_floor
+                    location = None
+                if node_location != location:
+                    print(f"\tLocation: {node_location}")
+                    location = node_location
+                print(f"\t\tNode: {self.nodes[action.node]}")
+            elif isinstance(action, UseSpecial):
+                sp_action = SPECIAL_ACTIONS[action.group][action.index]
+                print(f"\t\tTrade: {action.group}, {sp_action}")
+
 
 
 @compact_dataclass
