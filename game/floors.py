@@ -121,7 +121,7 @@ def fourth_floor(tower: TowerGraph, stairs: int) -> int:
     r_slime = tower.add_node(TowerNode(monster=Monster.RedSlime), [stairs])
     bat = tower.add_node(TowerNode(monster=Monster.Bat), [r_slime])
     bat = tower.add_node(TowerNode(monster=Monster.Bat), [bat])
-    door = tower.add_node(TowerNode(key_required=Keys(yellow=1)), [r_slime])
+    door = tower.add_node(TowerNode(key_required=Keys(yellow=1)), [bat])
     big_slime = tower.add_node(TowerNode(monster=Monster.BigSlime), [door])
     door = tower.add_node(TowerNode(key_required=Keys(yellow=1)), [big_slime])
     skeleton = tower.add_node(TowerNode(monster=Monster.Skeleton, health_gain=400), [door])
@@ -159,8 +159,8 @@ def fifth_floor(tower: TowerGraph, stairs: int) -> int:
     # shortest route up
     tower.current_location = "entrance"
     entrance_bat = tower.add_node(TowerNode(monster=Monster.Bat), [stairs])
-    bat = tower.add_node(TowerNode(monster=Monster.Bat), [entrance_bat])
     tower.current_location = "shortcut"
+    bat = tower.add_node(TowerNode(monster=Monster.Bat), [entrance_bat])
     shortcut_door = tower.add_node(TowerNode(key_required=Keys(yellow=1)), [bat])
     blue_door = tower.add_node(TowerNode(key_required=Keys(blue=1), key_gain=Keys(yellow=1), defense_gain=3), [shortcut_door])
     exit_door_1 = tower.add_node(TowerNode(key_required=Keys(yellow=1)), [blue_door])
@@ -209,5 +209,55 @@ def fifth_floor(tower: TowerGraph, stairs: int) -> int:
     gate_a = tower.add_node(TowerNode(monster=Monster.GateA), [skeleton])
     exit_door_2 = tower.add_node(TowerNode(key_required=Keys(yellow=1)), [gate_a])
 
+    tower.current_location = "Exit"
     stairs = tower.add_node(TowerNode(), [exit_door_1, exit_door_2])
     return stairs
+
+def sixth_floor(tower: TowerGraph, stairs: int) -> int:
+    tower.current_floor = "Sixth floor"
+    #Straight route
+    tower.current_location = "Straight route"
+    double_door = tower.add_node(TowerNode(key_required=Keys(yellow=2)), [stairs])
+
+    #upper route
+    tower.current_location = "Upper route"
+    door = tower.add_node(TowerNode(key_required=Keys(blue=1)), [stairs])
+    exit_b_bat = tower.add_node(TowerNode(monster=Monster.BigBat), [door])
+
+    #Side hallway
+    tower.current_location = "Side hallway"
+    door = tower.add_node(TowerNode(key_required=Keys(yellow=1)), [exit_b_bat])
+    b_bat = tower.add_node(TowerNode(monster=Monster.BigBat), [door])
+    door = tower.add_node(TowerNode(key_required=Keys(yellow=1)), [b_bat])
+    b_bat = tower.add_node(TowerNode(monster=Monster.BigBat), [door])
+    door = tower.add_node(TowerNode(key_required=Keys(yellow=1)), [b_bat])
+    b_bat = tower.add_node(TowerNode(monster=Monster.BigBat), [door])
+    superion = tower.add_node(TowerNode(monster=Monster.Superion, key_gain=Keys(yellow=3)), [b_bat])
+
+    #Gate hallway
+    tower.current_location = "Gate hallway"
+    door_gate = tower.add_node(TowerNode(key_required=Keys(red=1), monster=Monster.GateA, attack_gain=3, defense_gain=3), [superion])
+
+    #Wing room
+    tower.current_location = "Wing room"
+    door = tower.add_node(TowerNode(key_required=Keys(blue=1), monster=Monster.RedBat, key_gain=Keys(yellow=2)), [door_gate])
+    skeleton_c_1 = tower.add_node(TowerNode(monster=Monster.SkeletonC), [door])
+    skeleton_c_2 = tower.add_node(TowerNode(monster=Monster.SkeletonC), [door])
+    wing = tower.add_node(TowerNode(), [skeleton_c_1, skeleton_c_2]) #This is the Wing, I don't know what it does yet
+
+    #Coin room
+    door = tower.add_node(TowerNode(key_required=Keys(blue=1), monster=Monster.RedBat, key_gain=Keys(yellow=3)), [door_gate])
+    slime_lord_1 = tower.add_node(TowerNode(monster=Monster.SlimeLord), [door])
+    slime_lord_2 = tower.add_node(TowerNode(monster=Monster.SlimeLord), [door])
+    coin = tower.add_node(TowerNode(), [slime_lord_1, slime_lord_2]) #This is the coin, I don't know what it does yet (probably gives money?)
+
+    #Health room
+    superion = tower.add_node(TowerNode(monster=Monster.Superion, key_gain=Keys(yellow=3)), [superion])
+    door_magician_a = tower.add_node(TowerNode(key_required=Keys(yellow=1)))
+    rock_1 = tower.add_node(TowerNode(monster=Monster.Rock), [door_magician_a])
+    rock_2 = tower.add_node(TowerNode(monster=Monster.Rock), [door_magician_a])
+    health = tower.add_node(TowerNode(health_gain=500), [rock_1, rock_2])
+
+    #exit
+    exit = tower.add_node(TowerNode(), [exit_b_bat, double_door])
+    return exit

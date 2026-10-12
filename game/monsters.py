@@ -19,6 +19,10 @@ class Monster(Enum):
     BigBat = (65, 30, 150, 8, 10)
     RedBat = (160, 90, 550, 25, 20)
     GateA = (150, 90, 450, 19, 22)
+    Superion = (200, 110, 100, 25, 30)
+    SkeletonC = (90, 50, 400, 12, 15)
+    SlimeLord = (250, 150, 700, 30, 32)
+    Rock = (115, 65, 500, 15, 15)
 
     def __init__(self, attack, defense, health, xp, gold):
         self.stats = Entity(attack, defense, health, xp, gold)
