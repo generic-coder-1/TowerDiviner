@@ -32,5 +32,11 @@ def main():
     build_tower().print_path_with_annotations(best.path)
 
 
+    fastest = min(comparison.reports.values(), key=lambda r: r.shortest_win).shortest_run
+    print(f"Fastest run: {fastest.agent_name} (seed {fastest.seed}), "
+          f"{fastest.steps} steps")
+    build_tower().print_path_with_annotations(fastest.path)
+
+
 if __name__ == "__main__":
     main()

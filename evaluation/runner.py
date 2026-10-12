@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import statistics
+import sys
 import time
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Callable
@@ -68,13 +69,18 @@ class AgentReport:
         return statistics.fmean(r.seconds for r in self.results)
 
     @property
-    def shortest_win(self) -> int | None:
+    def shortest_win(self) -> int:
         wins = [r.steps for r in self.results if r.won]
-        return min(wins) if wins else None
+        return min(wins) if wins else sys.maxsize
 
     @property
     def best_run(self) -> RunResult:
         return max(self.results, key=lambda r: r.rank_key)
+
+    
+    @property
+    def shortest_run(self) -> RunResult:
+        return min([result for result in self.results if result.won], key=lambda r: r.steps)
 
 
 def run_episode(
