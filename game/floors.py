@@ -14,6 +14,7 @@ def build_tower() -> TowerGraph:
     stair = third_floor(tower, stair)
     stair = fourth_floor(tower, stair)
     stair = fifth_floor(tower, stair)
+    stair = sixth_floor(tower, stair)
     return tower
 
 
@@ -246,12 +247,14 @@ def sixth_floor(tower: TowerGraph, stairs: int) -> int:
     wing = tower.add_node(TowerNode(), [skeleton_c_1, skeleton_c_2]) #This is the Wing, I don't know what it does yet
 
     #Coin room
+    tower.current_location = "Coin room"
     door = tower.add_node(TowerNode(key_required=Keys(blue=1), monster=Monster.RedBat, key_gain=Keys(yellow=3)), [door_gate])
     slime_lord_1 = tower.add_node(TowerNode(monster=Monster.SlimeLord), [door])
     slime_lord_2 = tower.add_node(TowerNode(monster=Monster.SlimeLord), [door])
     coin = tower.add_node(TowerNode(), [slime_lord_1, slime_lord_2]) #This is the coin, I don't know what it does yet (probably gives money?)
 
     #Health room
+    tower.current_location = "Health room"
     superion = tower.add_node(TowerNode(monster=Monster.Superion, key_gain=Keys(yellow=3)), [superion])
     door_magician_a = tower.add_node(TowerNode(key_required=Keys(yellow=1)))
     rock_1 = tower.add_node(TowerNode(monster=Monster.Rock), [door_magician_a])
@@ -259,5 +262,42 @@ def sixth_floor(tower: TowerGraph, stairs: int) -> int:
     health = tower.add_node(TowerNode(health_gain=500), [rock_1, rock_2])
 
     #exit
+    tower.current_location = "Exit"
     exit = tower.add_node(TowerNode(), [exit_b_bat, double_door])
+    return exit
+
+def seventh_floor(tower: TowerGraph, stairs: int) -> int:
+    tower.current_floor = "Seventh floor"
+    #skeleton side
+    tower.current_location = "Skeleton side"
+    skeleton_door = tower.add_node(TowerNode(key_required=Keys(yellow=1)), [stairs])
+    skeleton_c = tower.add_node(TowerNode(monster=Monster.SkeletonC, attack_gain=3), [skeleton_door])
+    skeleton_c = tower.add_node(TowerNode(monster=Monster.SkeletonC), [skeleton_c])
+
+    #bat side
+    tower.current_location = "Bat side"
+    red_bat_1 = tower.add_node(TowerNode(monster=Monster.RedBat), [skeleton_c])
+    red_bat_2 = tower.add_node(TowerNode(monster=Monster.RedBat), [skeleton_c])
+    defense_up = tower.add_node(TowerNode(defense_gain=3), [red_bat_1, red_bat_2])
+    door = tower.add_node(TowerNode(key_required=Keys(yellow=1))) #this door technically leads down, but you cannot access it when going up, you have to go through the skeletons first, that is why it will not connect to anything
+
+    #Goodie room
+    tower.current_location = "Goodies room"
+    door = tower.add_node(TowerNode(key_required=Keys(red=1), key_gain=Keys(blue=4, yellow=2), health_gain=1300, defense_gain=3, attack_gain=3), [stairs])
+
+    #cross access
+    tower.current_location = "Cross - Bottom"
+    cross_bottom = tower.add_node(TowerNode(key_required=Keys(blue=1), monster=Monster.TheMagic), [door])
+    tower.current_location = "Cross - Right"
+    cross_right = tower.add_node(TowerNode(key_required=Keys(blue=1), monster=Monster.TheMagic), [skeleton_door])
+    tower.current_location = "Cross - Top"
+    cross_top = tower.add_node(TowerNode(key_required=Keys(blue=1), monster=Monster.TheMagic), [skeleton_c])
+    tower.current_location = "Cross - Left"
+    cross_left = tower.add_node(TowerNode(key_required=Keys(blue=1), monster=Monster.TheMagic), [red_bat_2])
+    tower.current_location = "Cross"
+    cross = tower.add_node(TowerNode(), [cross_bottom, cross_right, cross_top, cross_left]) #I don't know what the cross does yet
+
+    #exit
+    tower.current_location = "Exit"
+    exit = tower.add_node(TowerNode(), [skeleton_c])
     return exit

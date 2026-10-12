@@ -23,6 +23,7 @@ class Monster(Enum):
     SkeletonC = (90, 50, 400, 12, 15)
     SlimeLord = (250, 150, 700, 30, 32)
     Rock = (115, 65, 500, 15, 15)
+    TheMagic = (300, 150, 1300, 35, 40)
 
     def __init__(self, attack, defense, health, xp, gold):
         self.stats = Entity(attack, defense, health, xp, gold)
