@@ -26,12 +26,14 @@ def main():
     comparison = compare_agents(agents, n_runs=args.runs, base_seed=args.seed)
     print(comparison.report())
 
+    print("\n============ BEST RUN ============")
     best = max(comparison.reports.values(), key=lambda r: r.best_score).best_run
     print(f"Highest-scoring run: {best.agent_name} (seed {best.seed}), "
           f"won={best.won}, {best.steps} steps")
     build_tower().print_path_with_annotations(best.path)
 
 
+    print("\n============ FASTEST RUN ============")
     fastest = min(comparison.reports.values(), key=lambda r: r.shortest_win).shortest_run
     print(f"Fastest run: {fastest.agent_name} (seed {fastest.seed}), "
           f"{fastest.steps} steps")
