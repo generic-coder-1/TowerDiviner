@@ -107,7 +107,7 @@ class TowerGraph:
                 if node_location != location:
                     print(f"\tLocation: {node_location}")
                     location = node_location
-                print(f"\t\tNode: {self.nodes[action.node]}")
+                print(f"\t\tNode {action.node:03d}: {self.nodes[action.node]}")
             elif isinstance(action, UseSpecial):
                 sp_action = SPECIAL_ACTIONS[action.group][action.index]
                 print(f"\t\tTrade: {action.group}, {sp_action}")
