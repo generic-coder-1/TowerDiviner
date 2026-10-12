@@ -15,6 +15,7 @@ def build_tower() -> TowerGraph:
     stair = fourth_floor(tower, stair)
     stair = fifth_floor(tower, stair)
     stair = sixth_floor(tower, stair)
+    stair = seventh_floor(tower, stair)
     return tower
 
 
@@ -256,7 +257,7 @@ def sixth_floor(tower: TowerGraph, stairs: int) -> int:
     #Health room
     tower.current_location = "Health room"
     superion = tower.add_node(TowerNode(monster=Monster.Superion, key_gain=Keys(yellow=3)), [superion])
-    door_magician_a = tower.add_node(TowerNode(key_required=Keys(yellow=1)))
+    door_magician_a = tower.add_node(TowerNode(key_required=Keys(yellow=1)), [superion])
     rock_1 = tower.add_node(TowerNode(monster=Monster.Rock), [door_magician_a])
     rock_2 = tower.add_node(TowerNode(monster=Monster.Rock), [door_magician_a])
     health = tower.add_node(TowerNode(health_gain=500), [rock_1, rock_2])
@@ -279,7 +280,7 @@ def seventh_floor(tower: TowerGraph, stairs: int) -> int:
     red_bat_1 = tower.add_node(TowerNode(monster=Monster.RedBat), [skeleton_c])
     red_bat_2 = tower.add_node(TowerNode(monster=Monster.RedBat), [skeleton_c])
     defense_up = tower.add_node(TowerNode(defense_gain=3), [red_bat_1, red_bat_2])
-    door = tower.add_node(TowerNode(key_required=Keys(yellow=1))) #this door technically leads down, but you cannot access it when going up, you have to go through the skeletons first, that is why it will not connect to anything
+    door = tower.add_node(TowerNode(key_required=Keys(yellow=1)), [red_bat_2]) #this door technically leads down, but you cannot access it when going up, you have to go through the skeletons first, that is why it will not connect to anything
 
     #Goodie room
     tower.current_location = "Goodies room"
