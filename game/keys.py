@@ -12,7 +12,6 @@ class Keys:
     red: int = 0
     blue: int = 0
     yellow: int = 0
-    green: int = 0
 
     def __add__(self, other):
         if not isinstance(other, Keys):

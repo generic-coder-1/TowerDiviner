@@ -68,7 +68,20 @@ def first_floor(tower: TowerGraph, stairs: int) -> int:
 
 def second_floor(tower: TowerGraph, stairs: int) -> int:
     tower.current_floor = "Second floor"
-    # TODO: add side room
+    #Side room
+    tower.current_location = "Side Room"
+    door = tower.add_node(TowerNode(), [stairs], unlock_conditions=["thief"])
+    top_loop_door = tower.add_node(TowerNode(key_required=Keys(yellow=1), key_gain=Keys(yellow=2), defense_gain=3), [door])
+    top_loop_shortcut_door = tower.add_node(TowerNode(key_required=Keys(yellow=1)), [door])
+    key_door = tower.add_node(TowerNode(key_required=Keys(yellow=1), key_gain=Keys(yellow=2), attack_gain=3), [door])
+    health_door = tower.add_node(TowerNode(key_required=Keys(blue=1), health_gain=2100), [door])
+    tower.current_location = "Top loop"
+    knight = tower.add_node(TowerNode(monster=Monster.Knight), [top_loop_door])
+    goodies = tower.add_node(TowerNode(key_gain=Keys(yellow=2), health_gain=500), [knight, top_loop_shortcut_door])
+    door =  tower.add_node(TowerNode(key_required=Keys(yellow=1)), [goodies])
+    top_room =  tower.add_node(TowerNode(key_required=Keys(yellow=1), monster=Monster.Knight, key_gain=Keys(yellow=3,blue=2,red=1), attack_gain=9, defense_gain=9), [door])
+    tower.current_location = "Dungeon"
+    dungeon =  tower.add_node(TowerNode(key_required=Keys(yellow=1), monster=Monster.Knight, attack_gain=70, defense_gain=30), [door])
     return stairs
 
 
@@ -140,8 +153,7 @@ def fourth_floor(tower: TowerGraph, stairs: int) -> int:
     big_bat = tower.add_node(TowerNode(monster=Monster.BigBat, defense_gain=6), [door])
     tower.add_node(TowerNode(monster=Monster.BigBat), [big_bat])  # dead end
     tower.add_node(TowerNode(monster=Monster.BigBat), [big_bat])  # dead end
-    tower.add_node(TowerNode(monster=Monster.RedBat), [big_bat])
-    # TODO! Figure out what happens after this point (try to free the prisoner?)
+    tower.add_node(TowerNode(monster=Monster.RedBat, special_actions_granted=['thief']), [big_bat])
 
     # exit
     tower.current_location = "Exit"
@@ -245,14 +257,14 @@ def sixth_floor(tower: TowerGraph, stairs: int) -> int:
     door = tower.add_node(TowerNode(key_required=Keys(blue=1), monster=Monster.RedBat, key_gain=Keys(yellow=2)), [door_gate])
     skeleton_c_1 = tower.add_node(TowerNode(monster=Monster.SkeletonC), [door])
     skeleton_c_2 = tower.add_node(TowerNode(monster=Monster.SkeletonC), [door])
-    wing = tower.add_node(TowerNode(), [skeleton_c_1, skeleton_c_2]) #This is the Wing, I don't know what it does yet
+    wing = tower.add_node(TowerNode(level_gain=1, attack_gain=10, defense_gain=10, health_gain=1000), [skeleton_c_1, skeleton_c_2]) #This is the Wing, I don't know what it does yet
 
     #Coin room
     tower.current_location = "Coin room"
     door = tower.add_node(TowerNode(key_required=Keys(blue=1), monster=Monster.RedBat, key_gain=Keys(yellow=3)), [door_gate])
     slime_lord_1 = tower.add_node(TowerNode(monster=Monster.SlimeLord), [door])
     slime_lord_2 = tower.add_node(TowerNode(monster=Monster.SlimeLord), [door])
-    coin = tower.add_node(TowerNode(), [slime_lord_1, slime_lord_2]) #This is the coin, I don't know what it does yet (probably gives money?)
+    coin = tower.add_node(TowerNode(gold_gain=300), [slime_lord_1, slime_lord_2]) #This is the coin, I don't know what it does yet (probably gives money?)
 
     #Health room
     tower.current_location = "Health room"
@@ -302,3 +314,6 @@ def seventh_floor(tower: TowerGraph, stairs: int) -> int:
     tower.current_location = "Exit"
     exit = tower.add_node(TowerNode(), [skeleton_c])
     return exit
+
+def eighth_floor(tower: TowerGraph, stairs: int) -> int:
+    pass

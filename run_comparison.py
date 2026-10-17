@@ -13,7 +13,6 @@ def main():
     parser.add_argument("--beam-width", type=int, default=100)
     args = parser.parse_args()
 
-    # Add your own agents to this list.
     agents = [
         RandomAgent(),
         SpecialRandomAgent(),

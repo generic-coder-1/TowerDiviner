@@ -44,6 +44,8 @@ class GameState:
     def legal_special_actions(self) -> list[UseSpecial]:
         result = []
         for group in sorted(self.tower_state.special_actions_unlocked):
+            if group not in SPECIAL_ACTIONS:
+                continue
             for i, action in enumerate(SPECIAL_ACTIONS[group]):
                 if action.possible(self.player):
                     result.append(UseSpecial(group, i))

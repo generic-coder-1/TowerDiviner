@@ -24,6 +24,8 @@ class Monster(Enum):
     SlimeLord = (250, 150, 700, 30, 32)
     Rock = (115, 65, 500, 15, 15)
     TheMagic = (300, 150, 1300, 35, 40)
+    Knight = (750, 650, 900, 70, 77)
+    Golden = (350, 200, 850, 40, 45)
 
     def __init__(self, attack, defense, health, xp, gold):
         self.stats = Entity(attack, defense, health, xp, gold)

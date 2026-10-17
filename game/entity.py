@@ -53,6 +53,7 @@ class Player(Entity):
     health: int = 1000
     xp: int = 0
     gold: int = 0
+    level: int = 0
     keys: Keys = field(default_factory=lambda: Keys(red=1, blue=1, yellow=1))
 
     def copy(self) -> Player:

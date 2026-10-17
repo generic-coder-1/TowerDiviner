@@ -36,6 +36,7 @@ class SpecialAction:
     health: int = 0
     xp: int = 0
     gold: int = 0
+    level: int = 0
     keys: Keys = field(default_factory=Keys)
 
     def possible(self, player: Player) -> bool:
@@ -48,6 +49,8 @@ class SpecialAction:
         if player.defense + self.defense < 0:
             return False
         if player.attack + self.attack < 0:
+            return False
+        if player.level + self.level < 0:
             return False
         if (player.keys + self.keys).any_negative():
             return False
@@ -63,6 +66,7 @@ class SpecialAction:
         player.defense += self.defense
         player.attack += self.attack
         player.keys += self.keys
+        player.level += self.level
         return True
 
 
@@ -75,7 +79,7 @@ SPECIAL_ACTIONS = {
     "old_man": [
         SpecialAction(attack=5, xp=-30),
         SpecialAction(defense=5, xp=-30),
-        SpecialAction(health=1000, attack=7, defense=7, xp=-100),
+        SpecialAction(health=1000, attack=7, defense=7, xp=-100, level = 1),
     ],
     "merchant": [
         SpecialAction(keys=Keys(yellow=1), gold=-10),
