@@ -308,7 +308,7 @@ def seventh_floor(tower: TowerGraph, stairs: int) -> int:
     tower.current_location = "Cross - Left"
     cross_left = tower.add_node(TowerNode(key_required=Keys(blue=1), monster=Monster.TheMagic), [red_bat_2])
     tower.current_location = "Cross"
-    cross = tower.add_node(TowerNode(), [cross_bottom, cross_right, cross_top, cross_left]) #I don't know what the cross does yet
+    cross = tower.add_node(TowerNode(special_actions_granted=["lucky cross"]), [cross_left]) #You can only enter from the left, I don't know why
 
     #exit
     tower.current_location = "Exit"
@@ -316,4 +316,9 @@ def seventh_floor(tower: TowerGraph, stairs: int) -> int:
     return exit
 
 def eighth_floor(tower: TowerGraph, stairs: int) -> int:
-    pass
+    tower.current_floor = "Eighth floor"
+    #entrance
+    tower.current_location = "Entrance"
+    b_bat = tower.add_node(TowerNode(monster=Monster.BigBat), [stairs])
+    r_bat = tower.add_node(TowerNode(monster=Monster.RedBat), [b_bat])
+    b_bat = tower.add_node(TowerNode(monster=Monster.BigBat), [r_bat])
